@@ -16,9 +16,11 @@ def infotodict(seqinfo):
     subindex: sub index within group
     """
     
-    t1w = create_key('anat/sub-{subject}_T1w')
-    task_MB2 = create_key('func/sub-{subject}_task-MB2_run-{item:03d}_bold')
-    task_MB3 = create_key('func/sub-{subject}_task-MB3_run-{item:03d}_bold')
+    t1w = create_key('sub-{subject}/anat/sub-{subject}_T1w')
+    task_MB2 = create_key('sub-{subject}/func/sub-{subject}_task-MB2_run-{item:03d}_bold')
+    task_MB3 = create_key('sub-{subject}/func/sub-{subject}_task-MB3_run-{item:03d}_bold')
+    fm_pe0 = create_key('sub-{subject}/fmap/sub-{subject}_dir-pe0_run-{item:03d}_epi')
+    fm_pe1 = create_key('sub-{subject}/fmap/sub-{subject}_dir-pe1_run-{item:03d}_epi')
     #retinotopy = create_key('func/sub-{subject}_task-Retinotopy_run-{item:03d}_bold')
     #retinotopy_sbref = create_key('func/sub-{subject}_task-Retinotopy_run-{item:03d}_sbref')
 
@@ -26,7 +28,7 @@ def infotodict(seqinfo):
     #pilot_retinotopy = create_key('func/sub-{subject}_task-Retinotopy_run-{item:03d}_bold')
     #pilot_retinotopy_sbref = create_key('func/sub-{subject}_task-Retinotopy_run-{item:03d}_sbref')
 
-    info = {t1w: [], task_MB2: [], task_MB3: []}
+    info = {t1w: [], task_MB2: [], task_MB3: [], fm_pe0: [], fm_pe1:[] }
 
     for idx, seq in enumerate(seqinfo):
         '''
@@ -70,6 +72,12 @@ def infotodict(seqinfo):
         
         if (z == 12000 ) and (TR == 1.8) : #a hack for 7002, where forgot to switch sequence
             info[task_MB2].append({'item': seq[2]})    
+
+        if (series == 'fMRI MB3 pepolar=0' ) and (TR == 1.8) : #a hack for 7002, where forgot to switch sequence
+            info[fm_pe0].append({'item': seq[2]})
+        
+        if (series == 'fMRI MB3 pepolar=1' ) and (TR == 1.8) : #a hack for 7002, where forgot to switch sequence
+            info[fm_pe1].append({'item': seq[2]})     
 
 
         #if (protocol == 'mb_bold_mb2_2p5mm_AP_Retinotopy') and (n_vol == 241) and ('NORM' in seq[19]):
